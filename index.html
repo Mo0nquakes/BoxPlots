@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>sblgd</title>
+    <style>
+        body {
+          text-align: center;
+        }
+        #container {
+          display: block;
+          margin: 20px auto; /* 上下留白，并使其左右居中 */
+          width: 100%; /* 设置宽度以防止图表过宽 */
+          max-width: 1500px; /* 限制最大宽度 */
+        }
+      </style>
+  </head>
+  <body>
+    <h2>年度统计数据箱型图</h2>
+    <div id="container"></div>
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.11/dist/g2.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.2/dist/data-set.min.js"></script>
+    <script>
+      const { DataView } = DataSet;
+      const data = [
+        { x: '2004', low: 0.8, q1: 1.8, median: 2.9, q3: 4.9, high: 13.2 },
+        { x: '2005', low: 0.7, q1: 1.0, median: 3.5, q3: 4.1, high: 8.6 },
+        { x: '2006', low: 0.8, q1: 1.1, median: 3.4, q3: 3.5, high: 7.1 },
+        { x: '2007', low: 0.9, q1: 1.4, median: 2.7, q3: 3, high: 6.2 },
+        { x: '2008', low: 1.6, q1: 2.4, median: 3.0, q3: 3.1, high: 3.8 },
+        { x: '2009', low: 1.6, q1: 3.3, median: 4.2, q3: 5.0, high: 5.9 },
+        { x: '2010', low: 1.13, q1: 3.1, median: 3.2, q3: 4.38, high: 5.79 },
+        { x: '2011', low: 0.96, q1: 3.03, median: 3.46, q3: 3.78, high: 4.68 },
+        { x: '2012', low: 0.95, q1: 2.86, median: 3.31, q3: 3.58, high: 4.04 },
+        { x: '2013', low: 0.99, q1: 2.7, median: 2.85, q3: 3.11, high: 3.64 },
+        { x: '2014', low: 1.29, q1: 2.34, median: 2.85, q3: 3.24, high: 3.5 }
+      ];
+      const dv = new DataView().source(data);
+      dv.transform({
+        type: 'map',
+        callback: obj => {
+          obj.range = [obj.low, obj.q1, obj.median, obj.q3, obj.high];
+          return obj;
+        }
+      });
+      const chart = new G2.Chart({
+        container: 'container',
+        forceFit: true,
+        height: 500,
+        padding: [50, 30, 95, 50] // 上、右、下、左
+      });
+      chart.source(dv, {
+        range: {
+          max: 14
+        }
+      });
+      chart.tooltip({
+        showTitle: false,
+        crosshairs: {
+          type: 'rect'
+        },
+        itemTpl: '<li data-index={index} style="margin-bottom:4px;">'
+          + '<span style="background-color:{color};" class="g2-tooltip-marker"></span>'
+          + '{name}<br/>'
+          + '<span style="padding-left: 16px">最大值：{high}</span><br/>'
+          + '<span style="padding-left: 16px">上四分位数：{q3}</span><br/>'
+          + '<span style="padding-left: 16px">中位数：{median}</span><br/>'
+          + '<span style="padding-left: 16px">下四分位数：{q1}</span><br/>'
+          + '<span style="padding-left: 16px">最小值：{low}</span><br/>'
+          + '</li>'
+      });
+      chart.schema().position('x*range')
+        .shape('box')
+        .tooltip('x*low*q1*median*q3*high', (x, low, q1, median, q3, high) => {
+          return {
+            name: x,
+            low,
+            q1,
+            median,
+            q3,
+            high
+          };
+        })
+        .style({
+          stroke: '#545454',
+          fill: '#FFB6C1',
+          fillOpacity: 0.3
+        });
+      chart.render();
+    </script>
+  </body>
+</html>
