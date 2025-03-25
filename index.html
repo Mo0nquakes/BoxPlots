@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>sblgd</title>
+    <title>BoxPlots</title>
     <style>
         body {
           text-align: center;
@@ -16,7 +16,7 @@
       </style>
   </head>
   <body>
-    <h2>年度统计数据箱型图</h2>
+    <h2>Bank non-performing loans to gross loans (%)</h2>
     <div id="container"></div>
     <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.11/dist/g2.min.js"></script>
     <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.2/dist/data-set.min.js"></script>
@@ -47,7 +47,7 @@
         container: 'container',
         forceFit: true,
         height: 500,
-        padding: [50, 30, 95, 50] // 上、右、下、左
+        padding: [50, 50, 95, 50] // 上、右、下、左
       });
       chart.source(dv, {
         range: {
@@ -62,14 +62,14 @@
         itemTpl: '<li data-index={index} style="margin-bottom:4px;">'
           + '<span style="background-color:{color};" class="g2-tooltip-marker"></span>'
           + '{name}<br/>'
-          + '<span style="padding-left: 16px">最大值：{high}</span><br/>'
-          + '<span style="padding-left: 16px">上四分位数：{q3}</span><br/>'
-          + '<span style="padding-left: 16px">中位数：{median}</span><br/>'
-          + '<span style="padding-left: 16px">下四分位数：{q1}</span><br/>'
-          + '<span style="padding-left: 16px">最小值：{low}</span><br/>'
+          + '<span style="padding-left: 16px">Max：{high}</span><br/>'
+          + '<span style="padding-left: 16px">Third Quartile：{q3}</span><br/>'
+          + '<span style="padding-left: 16px">Median：{median}</span><br/>'
+          + '<span style="padding-left: 16px">First Quartile：{q1}</span><br/>'
+          + '<span style="padding-left: 16px">Min：{low}</span><br/>'
           + '</li>'
       });
-      chart.schema().position('x*range')
+      chart.schema().position('x*range') 
         .shape('box')
         .tooltip('x*low*q1*median*q3*high', (x, low, q1, median, q3, high) => {
           return {
@@ -83,7 +83,7 @@
         })
         .style({
           stroke: '#545454',
-          fill: '#FFB6C1',
+          fill: '#1890FF',
           fillOpacity: 0.3
         });
       chart.render();
